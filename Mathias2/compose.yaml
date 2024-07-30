@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  todo-app:
+    build:
+      context: ./app
+    depends_on:
+      - db-produtos
+      - db-bebidas
+    environment:
+      NODE_ENV: production
+    ports:
+      - "80:3001"
+      - "35729:35729"
+
+  db-produtos:
+    build:
+      context: ./db-produtos
+      dockerfile: Dockerfile.db-produtos
+    volumes: 
+      - database:/data/db
+    ports:
+      - "27017:27017"
+
+  db-bebidas:
+    build:
+      context: ./db-bebidas
+      dockerfile: Dockerfile.db-bebidas
+    volumes: 
+      - database2:/data/db
+    ports:
+      - "27018:27017"  
+
+volumes:
+  database:
+  database2:

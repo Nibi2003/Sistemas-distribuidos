@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Produtos e Bebidas</title>
+    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            background-color: #fffbea; /* Creme background */
+        }
+
+        .container-custom {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .box-custom {
+            padding: 1.5rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-custom {
+            text-align: center;
+            color: #000; /* Título em preto */
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+
+        .input-group-custom {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .input-group-custom input {
+            flex: 1;
+        }
+
+        .list-custom {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+
+        .list-custom li {
+            padding: 0.5rem;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-custom li:last-child {
+            border-bottom: none;
+        }
+
+        .btn-custom {
+            background-color: #ff7f50; /* Botões laranja */
+            border: none;
+        }
+
+        .btn-custom:hover {
+            background-color: #ff6347; /* Botões laranja mais escuro no hover */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container container-custom mt-5">
+        
+        <!-- App title section -->
+        <div class="header-custom h1">
+            <u>Lista de Produtos e Bebidas</u>
+        </div>
+
+        <!-- Three boxes side by side -->
+        <div class="row">
+            <!-- First Rectangle - Produtos -->
+            <div class="col-md-4 box-custom">
+                <h3>Produtos</h3>
+                <form method="POST" action="/" autocomplete="off">
+                    <div class="input-group-custom">
+                        <input class="form-control form-control-lg" type="text" name="nome_html" placeholder="Por favor adicione um Produto">
+                        <button type="submit" class="btn btn-custom">Add</button>
+                    </div>
+                </form>
+                <div class="list-custom">
+                    <% if(nomes.length > 0) { %>
+                        <ul class="nav flex-column">
+                            <% nomes.forEach(aluno => { %>
+                                <li class="nav-item">
+                                    <div><%= aluno.nome %></div>
+                                    <a href="javascript:;" onclick="this.children[0].submit()" class="text-danger">
+                                        <form method="POST" action="/AlunoCiencia/destroy">
+                                            <input type="hidden" name="_key" value="<%= aluno._id %>" />
+                                        </form>
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    <% } else { %>
+                        <div class="text-center"><strong>Por favor adicione alguns produtos.</strong></div>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Second Rectangle - Bebidas -->
+            <div class="col-md-4 box-custom">
+                <h3>Bebidas</h3>
+                <form method="POST" action="/super" autocomplete="off">
+                    <div class="input-group-custom">
+                        <input class="form-control form-control-lg" type="text" name="nome_super" placeholder="Por favor adicione uma Bebida">
+                        <button type="submit" class="btn btn-custom">Add</button>
+                    </div>
+                </form>
+                <div class="list-custom">
+                    <% if(nomesSuper.length > 0) { %>
+                        <ul class="nav flex-column">
+                            <% nomesSuper.forEach(alunoSuper => { %>
+                                <li class="nav-item">
+                                    <div><%= alunoSuper.nome %></div>
+                                    <a href="javascript:;" onclick="this.children[0].submit()" class="text-danger">
+                                        <form method="POST" action="/super/destroy">
+                                            <input type="hidden" name="_key" value="<%= alunoSuper._id %>" />
+                                        </form>
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    <% } else { %>
+                        <div class="text-center"><strong>Por favor adicione algumas bebidas.</strong></div>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Third Rectangle - Search Functionality -->
+            <div class="col-md-4 box-custom">
+                <h3>Pesquise um nome</h3>
+                <form method="POST" action="/search">
+                    <div class="input-group-custom">
+                        <input class="form-control form-control-lg" type="text" name="nome_pesquisa" placeholder="Digite um nome para pesquisar">
+                        <button type="submit" class="btn btn-custom">Buscar</button>
+                    </div>
+                </form>
+                <div class="mt-3">
+                    <% if(resultado) { %>
+                        <div class="text-center">
+                            <% if(resultado.presenteEmAmbos) { %>
+                                <strong>O nome está presente nas duas listas.</strong>
+                            <% } else if(resultado.presenteSomenteCiencia) { %>
+                                <strong>O nome está presente somente na lista de produtos.</strong>
+                            <% } else if(resultado.presenteSomenteSuper) { %>
+                                <strong>O nome está presente somente na lista de bebidas.</strong>
+                            <% } else { %>
+                                <strong>O nome não está presente em nenhuma lista.</strong>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</body>
+
+</html>
