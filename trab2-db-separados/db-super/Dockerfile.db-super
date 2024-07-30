@@ -1,0 +1,3 @@
+# Dockerfile.db-super
+FROM mongo:6
+# Adicione qualquer configuração específica aqui
